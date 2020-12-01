@@ -351,12 +351,14 @@ class game():
                     # jump
                     if ((event.key == pygame.K_SPACE) |
                         (event.key == pygame.K_z)) & (canJump == True):
-                        if canJump:
-                            # 두번째 점프일때 aim 설정
-                            aim = aim - 90 if (up == True) else change_y - 90
-                            isJumping = up = True
-                            jumpCount += 1
-                            jump_size = 10
+                        # 두번째 점프일때 aim 설정
+                        jump_size = 10
+                        if up == True:
+                            aim = aim - 90
+                        else:
+                            aim = change_y - 90
+                        isJumping = up = True
+                        jumpCount += 1
                         if jumpCount == 2:
                             jumpCount = 0
                             canJump = False
@@ -372,15 +374,18 @@ class game():
                     change_y -= jump_size
                     jump_size -= 1
                     if jump_size < 5: jump_size = 5
-                    if change_y <= aim: up = False
+                    if change_y <= aim:
+                        change_y = aim
+                        up = False
                 else:
                     change_y += jump_size
                     jump_size += 1
                     if jump_size > 10: jump_size = 10
                     if change_y >= y:
                         change_y = aim = y
-                        up = canJump = True
-                        isJumping = False
+                        canJump = True
+                        jumpCount = 0
+                        isJumping = up = False
                         status = 'landStand'
             elif isSliding == True:
                 status = 'slide'
